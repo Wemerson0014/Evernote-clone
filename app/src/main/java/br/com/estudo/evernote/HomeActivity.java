@@ -1,6 +1,8 @@
 package br.com.estudo.evernote;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.estudo.evernote.ui.EvernoteApi;
+import br.com.estudo.evernote.ui.Note;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -37,8 +50,8 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(getApplicationContext(), FormActivity.class);
+                startActivity(intent);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -56,14 +69,52 @@ public class HomeActivity extends AppCompatActivity {
 
         DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
 
-        adapter = new NoteAdapter();
+        List<Note> notes = new ArrayList<>();
+
+        adapter = new NoteAdapter(notes);
         RecyclerView rv = findViewById(R.id.recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
         rv.addItemDecoration(divider);
+        
+        request();
+    }
+
+    private void request() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://myevernote.glitch.me")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        EvernoteApi api = retrofit.create(EvernoteApi.class);
+        api.listNotes().enqueue(new Callback<List<Note>>() {
+            @Override
+            public void onResponse(Call<List<Note>> call, Response<List<Note>> response) {
+                if (response.isSuccessful()){
+                    List<Note> notes = response.body();
+
+                    if (notes != null){
+                        adapter.notes.clear();
+                        adapter.notes.addAll(notes);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Note>> call, Throwable t) {
+                Log.i("t", t.getMessage());
+            }
+        });
     }
 
     private class NoteAdapter extends RecyclerView.Adapter<NoteView> {
+
+        private final List<Note> notes;
+
+        private NoteAdapter(List<Note> notes) {
+            this.notes = notes;
+        }
 
         @NonNull
         @Override
@@ -74,13 +125,13 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull NoteView holder, int position) {
-            holder.bind("Título" + position, "Desc test Desc test Desc test Desc test Desc test Desc test Desc test Desc test Desc test Desc test Desc test Desc test Desc test , ",
-                    "03/12/2019");
+            Note note = notes.get(position);
+            holder.bind(note.getTitle(), note.getDesc(), note.getDate());
         }
 
         @Override
         public int getItemCount() {
-            return 30;
+            return notes.size();
         }
     }
 
@@ -94,7 +145,7 @@ public class HomeActivity extends AppCompatActivity {
             noteDate = itemView.findViewById(R.id.note_date);
         }
 
-        void bind(String title, String desc, String date){
+        void bind(String title, String desc, String date) {
             noteTitle.setText(title);
             noteDesc.setText(desc);
             noteDate.setText(date);
