@@ -9,7 +9,7 @@ Aplicativo criado como forma de estudos baseando-se no aplicativo oficial de not
 3. Este projeto utiliza-se de servidor de terceiros para salvar notas, então pode ocorrer do mesmo estar **offline**.
 4. Este projeto limita-se a apenas criar, editar e salvar uma nota.
 5. Layouts, menu lateral e superior apenas para referência de estudos baseado no aplicativo base. **Não funcionais**.
-6. Ìcone de sinal de (+) serve para adição de uma nova nota, ícone de lápis serve para abertura do teclado para edição de nota, ícone superior com sinal de *check* serve para salvar a nota depois de criada e editada. Esses são ícones **funcionais**.
+6. Ícone de sinal de (+) serve para adição de uma nova nota, ícone de lápis serve para abertura do teclado para edição de nota, ícone superior com sinal de *check* serve para salvar a nota depois de criada e editada. Esses são ícones **funcionais**.
 
 
 # Página Inicial
@@ -57,5 +57,5 @@ Android 4.2 Jelly Bean - API 17 ou superior.
 
 # Finalidade
 
-Este aplicativo foi contruído como forma de estudo utilizando-se da linguagem de programação [Java](https://docs.oracle.com/javase/8/docs/technotes/guides/language/index.html)
-voltada para [Android](https://www.android.com/intl/pt-BR_br/gms/). O aplicativo teve como objetivo criar uma nota e salvá-la em um servidor de terceiro (utilizado como ambiente de estudos) e depois visualizar em uma lista na tela principal, onde poderia editar a nota existente ou criar uma nova.
+Este aplicativo foi construído como forma de estudo utilizando-se da linguagem de programação [Java](https://docs.oracle.com/javase/8/docs/technotes/guides/language/index.html)
+voltada para [Android](https://www.android.com/intl/pt-BR_br/gms/). O aplicativo teve como objetivo criar uma nota e salvá-la em um servidor de terceiros (utilizado como ambiente de estudos) e depois visualizar em uma lista na tela principal, onde poderia editar a nota existente ou criar uma nova.
